@@ -40,7 +40,7 @@ div.second:hover {
     height: 75px;
 }
 #container2 > div:nth-child(3) {
-    background-color: rgb(207, 14, 198);
+    background-color: rgb(206, 14, 198);
     height: 50px;
 }
 #container2 > div:hover {
