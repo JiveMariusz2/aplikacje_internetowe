@@ -17,87 +17,106 @@ const fields = [
     {txt: 'Display', col:'1/5', row: 1},
     ];
 
-let clearFlag = true;
-let memory = 0;
-let op = 0;
+    
+
+    class Calc {
+        constructor(){
+            this.clearFlag = false;
+            this.memory = 0;
+            this.op = 0;
+            this.container = document.createElement('div');
+            this.container.id = 'container';
+            this.disply = null;
 
 
-
-
-
-
-
-const handleClick =ev => { 
-        const disp = document.getElementById('display');
-        const key  = ev.target.textContent;
-        switch(key)
-        {
-            case 'C':
-                disp.textContent = 0;
-                memory = 0;
-                op = 0;
-                break;
-
-                case '+':
-                case '-':
-                if (op === 0){
-                    memory = parseFloat(disp.textContent);
+            fields.forEach(el => {
+                const button=document.createElement('div');
+                button.textContent=el.txt;
+                button.style.gridColumn=el.col;
+                button.style.gridRow=el.row;
+                if (el.txt==='Display')
+                {
+                    //button.id='display';
+                    button.textContent='0';
+                    this.display = button;
                 }
-                else {
-                    memory += op * parseFloat(disp.textContent);
-                }
-                op = key === '+' ? 1 : -1;
-                clearFlag=true;
-                break;
-
-                case '=':
-                if (op === 0){
-                    memory = parseFloat(disp.textContent);
-                }
-                else {
-                    memory += op * parseFloat(disp.textContent);
-                }
-                disp.textContent = memory;
-                op = 0;
-
-                break;
-
-
-            default:
-                if (key === '0' && disp.textContent === '0') return;
-                if (key === '.' && disp.textContent.includes('.')) return;
-                if ((key === '.' && disp.textContent === '0') || clearFlag) {
-                    disp.textContent = key;
-                    clearFlag=false;
-                    
-                }
-                else {
-                    disp.textContent += key;
-                }
+                else{
+                    button.addEventListener('click', ev => this.handleClick(ev));
+                } 
+                this.container.appendChild(button);
+        
+            });
         }
-    };
 
-const init = () => {
-    const container =document.createElement('div');
-    container.id='container';
-
-
-    fields.forEach(el => {
-        const button=document.createElement('div');
-        button.textContent=el.txt;
-        button.style.gridColumn=el.col;
-        button.style.gridRow=el.row;
-        if (el.txt==='Display')
-        {
-            button.id='display';
-            button.textContent='0';
-        }
-        else{
-            button.addEventListener('click', handleClick);
-        } 
-        container.appendChild(button);
-
-    });
-    document.body.appendChild(container);
+set dis(val){
+this.display.textContent = val;
 }
-window.addEventListener('DOMContentLoaded',init);
+get disp(){
+    return this.display.textContent;
+}
+
+
+        handleClick(ev) { 
+            const disp = document.getElementById('display');
+            const key  = ev.target.textContent;
+            switch(key)
+            {
+                case 'C':
+                    this.disp = 0;
+                    this.clearFlag = true;
+                    this.memory = 0;
+                    this.op = 0;
+                    break;
+    
+                    case '+':
+                    case '-':
+                    if (this.op === 0){
+                        this.memory = parseFloat(this.disp);
+                    }
+                    else {
+                        this.memory += op * parseFloat(this.disp);
+                    }
+                    this.op = key === '+' ? 1 : -1;
+                    this.clearFlag=true;
+                    break;
+    
+                    case '=':
+                    if (this.op === 0){
+                        this.memory = parseFloat(this.isp);
+                    }
+                    else {
+                        this.memory += op * parseFloat(disp);
+                    }
+                    this.disp = this.memory;
+                    this.op = 0;
+    
+                    break;
+    
+    
+                default:
+                    if (key === '0' && this.disp.textContent === '0') return;
+                    if (key === '.' && this.disp.textContent.includes('.')) return;
+                    if ((key === '.' && this.disp.textContent === '0') || this.clearFlag) {
+                        this.disp.textContent = key;
+                        this.clearFlag=false;
+                        
+                    }
+                    else {
+                        this.disp.textContent += key;
+                    }
+            }
+        }
+
+        init() {
+            document.body.appendChild(this.container);
+        }
+        
+    }
+    const calc = new Calc();
+
+
+
+
+
+
+window.addEventListener('DOMContentLoaded', () => calc.init());
